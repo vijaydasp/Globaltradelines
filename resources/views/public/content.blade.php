@@ -1,0 +1,1 @@
+<?php cms_view('public/hero',compact('page'));?><main><?php if($page['body']):?><section class="section-padding"><div class="container rich-text"><?=rich($page['body'])?></div></section><?php endif?><?php foreach($sections as $section)cms_view('public/section',compact('section'));?></main>

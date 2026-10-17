@@ -1,0 +1,1 @@
+<?php cms_view('public/hero',compact('page'));?><main><?php if($page['body']):?><section class="section-padding"><div class="container rich-text"><?=rich($page['body'])?></div></section><?php endif?><?php cms_view('public/contact-form',compact('form_errors','form_values'));foreach($sections as $section)cms_view('public/section',compact('section'));?></main>

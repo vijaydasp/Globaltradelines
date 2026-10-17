@@ -1,0 +1,1 @@
+<main class="gtl-home"><?php foreach($sections as $section)cms_view('public/section',compact('section'));?><?php if($page['body']):?><section class="section-padding"><div class="container rich-text"><?=rich($page['body'])?></div></section><?php endif?></main>

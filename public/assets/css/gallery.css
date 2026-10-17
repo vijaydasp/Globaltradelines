@@ -1,0 +1,67 @@
+.gallery { padding: 72px 0 80px; background: #f8faf8; color: var(--ink); }
+.gallery *, .gallery *::before, .gallery *::after { box-sizing: border-box; }
+.gallery-intro { max-width: 740px; margin: 0 auto 32px; text-align: center; }
+.gallery-eyebrow { display: block; color: var(--primary); font-size: 12px; font-weight: 800; letter-spacing: .18em; margin-bottom: 16px; }
+.gallery-intro h1 { font-family: Manrope,sans-serif; font-size: clamp(34px,5vw,56px); font-weight: 800; letter-spacing: -.04em; line-height: 1.15; margin-bottom: 20px; overflow-wrap: anywhere; }
+.gallery-intro p, .gallery-section-heading p { color: var(--muted); line-height: 1.8; }
+.gallery-intro p { font-size: 17px; }
+.gallery-tabs { display: flex; justify-content: center; gap: 6px; margin: 0 auto 52px; padding: 6px; background: #eaf0ec; border: 1px solid var(--line); border-radius: 100px; width: fit-content; max-width: 100%; }
+.gallery-tab { display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 100px; padding: 14px 30px; color: var(--green-dark); font-weight: 700; text-decoration: none; transition: background .2s, color .2s; }
+.gallery-tab i { font-size: 21px; }
+.gallery-tab[aria-selected=true], .gallery-tab:hover { background: var(--primary); color: white; }
+.gallery-section-heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 28px; }
+.gallery-section-heading h2, .gallery-connect h2 { font-family: Manrope,sans-serif; font-size: clamp(23px,3vw,30px); letter-spacing: -.03em; font-weight: 800; }
+.gallery-section-heading p { margin-bottom: 0; }
+.gallery-follow { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 13px 22px; border: 1px solid #c5dacf; border-radius: 100px; color: var(--green-dark); font-size: 14px; font-weight: 700; text-decoration: none; flex-shrink: 0; }
+.gallery-follow:hover { background: var(--primary); color: white; }
+.gallery-panel { min-width: 0; animation: gallery-appear .25s ease-out; }
+.gallery-panel + .gallery-panel { margin-top: 48px; }
+.gallery-tabs[role=tablist] ~ .gallery-panel { margin-top: 0; }
+.gallery-carousel { min-width: 0; }
+.gallery-grid { position: relative; --columns: 3; display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 3); gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; padding: 6px 0 20px; }
+.gallery-card { position: relative; min-width: 0; scroll-snap-align: start; overflow: hidden; border-radius: 16px; background: white; border: 1px solid var(--line); box-shadow: 0 6px 18px #0b4a2e09; }
+.gallery-card-link { display: flex; flex-direction: column; height: 100%; color: inherit; text-decoration: none; }
+.gallery-card-link:hover { color: inherit; }
+.gallery-card:focus-within { outline: 3px solid var(--primary); outline-offset: -3px; }
+.gallery-media { position: relative; aspect-ratio: 4/4.5; background: #e7eee9; overflow: hidden; }
+.gallery-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+.gallery-card-link:hover img { transform: scale(1.025); }
+.gallery-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; padding: 24px; color: var(--green-dark); text-align: center; font-size: 14px; }
+.gallery-placeholder i { font-size: 36px; }
+.gallery-platform, .gallery-kind { position: absolute; top: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; background: #10281ddd; color: white; border-radius: 30px; }
+.gallery-platform { left: 16px; width: 34px; height: 34px; font-size: 18px; }
+.gallery-kind { right: 16px; padding: 7px 12px; font-size: 12px; }
+.gallery-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 54px; height: 54px; display: grid; place-items: center; border-radius: 50%; background: #10281d99; border: 1px solid #ffffffaa; color: white; }
+.gallery-card-body { display: flex; flex: 1; flex-direction: column; padding: 24px; }
+.gallery-caption { color: var(--ink); font-size: 14px; line-height: 1.75; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 14px; }
+.gallery-card-body time { font-size: 12px; color: var(--muted); margin-top: auto; }
+.gallery-post-link { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); font-weight: 700; color: var(--primary); font-size: 13px; }
+.gallery-controls { display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 12px; }
+.gallery-controls > button { border: 1px solid #c5dacf; border-radius: 50%; width: 44px; height: 44px; background: white; color: var(--green-dark); font-size: 20px; }
+.gallery-controls > button:disabled { opacity: .35; cursor: default; }
+.gallery-dots { display: flex; justify-content: center; flex-wrap: wrap; max-width: 65%; }
+.gallery-dot { display: grid; place-items: center; width: 28px; height: 44px; border: 0; padding: 0; background: transparent; }
+.gallery-dot::after { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #b7c7bd; }
+.gallery-dot[aria-current=true]::after { background: var(--primary); width: 10px; height: 10px; }
+.gallery-empty { text-align: center; padding: 64px 24px; border: 1px dashed #c5dacf; border-radius: 16px; color: var(--muted); }
+.gallery-empty i { font-size: 36px; color: var(--primary); margin-bottom: 20px; }
+.gallery-connect { text-align: center; border-top: 1px solid var(--line); padding-top: 52px; margin-top: 64px; }
+.gallery-connect-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.gallery [hidden] { display: none !important; }
+.gallery a:focus-visible, .gallery button:focus-visible, .gallery-grid:focus-visible { outline: 3px solid var(--primary); outline-offset: -3px; }
+@keyframes gallery-appear { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 991px) { .gallery-grid { --columns: 2; grid-auto-columns: calc((100% - 24px) / 2); } }
+@media (max-width: 575px) {
+  .gallery { padding: 44px 0 56px; }
+  .gallery-grid { --columns: 1; grid-auto-columns: 100%; }
+  .gallery-tab { padding: 12px 18px; font-size: 14px; gap: 8px; }
+  .gallery-tabs { margin-bottom: 32px; }
+  .gallery-section-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .gallery-card-body { padding: 20px; }
+}
+@media (prefers-reduced-motion: reduce) { .gallery-panel, .gallery * { animation: none; transition: none; scroll-behavior: auto; } .gallery-card-link:hover img { transform: none; } }
+
+/* Video bytes are requested only when a mouse enters a playable card. */
+.gallery-preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; pointer-events: none; }
+.gallery-card.is-previewing .gallery-preview { opacity: 1; }
+.gallery-card.is-previewing .gallery-play { opacity: 0; }

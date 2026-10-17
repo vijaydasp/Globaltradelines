@@ -1,0 +1,36 @@
+
+  .brands-page{background:#f5f8f6;color:#171d1a}
+  .brands-hero{position:relative;overflow:hidden;background:linear-gradient(120deg,#006535,#078144);color:#fff;padding:76px 0 70px}
+  .brands-hero-image{position:absolute;inset:0;background-size:cover;background-position:center}
+  .brands-hero-image::after{content:"";position:absolute;inset:0;background:rgba(0,55,29,.72)}
+  .brands-hero::before{content:"";position:absolute;right:-130px;top:-150px;width:390px;height:390px;border:48px solid rgba(255,255,255,.1);border-radius:50%}
+  .brands-hero::after{content:"";position:absolute;left:-90px;bottom:-135px;width:270px;height:270px;border:32px solid rgba(255,255,255,.08);border-radius:50%}
+  .brands-hero .container{position:relative;z-index:1;max-width:1180px;padding:0 28px}
+  .brands-kicker{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.14em}
+  .brands-kicker::after{content:"";width:36px;height:2px;background:#fff;border-radius:2px}
+  .brands-hero h1{max-width:760px;font-size:clamp(2.1rem,4vw,4rem);line-height:1.05;font-weight:900;letter-spacing:0;margin-bottom:16px}
+  .brands-hero p{max-width:720px;margin:0;color:rgba(255,255,255,.88);font-size:1.05rem;line-height:1.75}
+  .brands-wrap{max-width:1180px;margin:0 auto;padding:44px 28px 82px}
+  .brands-panel{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:-82px 0 32px;padding:24px;border-radius:8px;background:#fff;border:1px solid #dcefe4;box-shadow:0 20px 50px rgba(0,101,53,.16);position:relative;z-index:3}
+  .brands-panel h2{font-size:1.35rem;font-weight:900;margin:0 0 4px;color:#171d1a}
+  .brands-panel p{margin:0;color:#68736d}
+  .brands-panel a{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border-radius:6px;background:#00753d;color:#fff;font-size:.84rem;font-weight:900;white-space:nowrap}
+  .brands-panel a:hover{background:#006535;color:#fff;transform:translateY(-2px)}
+  .brands-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+  .brand-tile{position:relative;display:flex;flex-direction:column;gap:10px;min-height:270px;padding:24px;border:1px solid #dcefe4;border-radius:8px;background:#fff;color:#171d1a;box-shadow:0 12px 28px rgba(15,23,42,.06);overflow:hidden}
+  .brand-tile::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,#006535,#cf2f2f)}
+  .brand-tile:hover{border-color:#078144;box-shadow:0 18px 42px rgba(0,101,53,.16);transform:translateY(-6px)}
+  .brand-logo-box{height:108px;display:flex;align-items:center;justify-content:center;border:1px solid #e7eee9;border-radius:8px;background:#fff;margin-bottom:4px}
+  .brand-logo-box img{max-height:82px;max-width:88%;object-fit:contain;filter:grayscale(.12);transition:filter .2s ease,transform .2s ease}
+  .brand-tile:hover .brand-logo-box img{filter:grayscale(0);transform:scale(1.03)}
+  .brand-initial{width:64px;height:64px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:#f5f8f6;color:#006535;border:2px solid #dcefe4;font-size:1.85rem;font-weight:900;text-transform:uppercase}
+  .brand-label{display:inline-flex;width:max-content;padding:4px 9px;border-radius:999px;background:#f5f8f6;color:#00753d;font-size:.68rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+  .brand-tile strong{font-size:1.08rem;font-weight:900;line-height:1.25}
+  .brand-tile small{color:#68736d;font-size:.84rem;line-height:1.55}
+  .brand-action{display:inline-flex;align-items:center;gap:8px;margin-top:auto;color:#00753d;font-size:.84rem;font-weight:900}
+  .brand-action i{font-size:.75rem;transition:transform .2s ease}
+  .brand-tile:hover .brand-action i{transform:translateX(3px)}
+  .brands-empty{text-align:center;background:#fff;border:1px dashed #bdd8ca;border-radius:8px;padding:46px 24px;color:#68736d;grid-column:1 / -1}
+  .brands-empty i{font-size:2rem;color:#00753d;margin-bottom:12px}
+  @media(max-width:991.98px){.brands-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.brands-panel{align-items:flex-start;flex-direction:column}}
+  @media(max-width:575.98px){.brands-hero{padding:58px 0 78px}.brands-hero .container,.brands-wrap{padding-left:18px;padding-right:18px}.brands-grid{grid-template-columns:1fr}.brands-panel{margin-top:-72px}.brand-tile{min-height:auto}}

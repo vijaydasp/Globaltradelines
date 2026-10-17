@@ -1,0 +1,2 @@
+<?php
+return ['driver'=>env('SESSION_DRIVER','file'),'lifetime'=>(int)env('SESSION_LIFETIME',60),'expire_on_close'=>false,'encrypt'=>false,'files'=>storage_path('framework/sessions'),'connection'=>null,'table'=>'sessions','store'=>null,'lottery'=>[2,100],'cookie'=>'gtl_laravel_session','path'=>rtrim(parse_url(env('APP_URL','http://localhost'),PHP_URL_PATH)??'','/')?:'/','domain'=>null,'secure'=>str_starts_with(env('APP_URL','http://localhost'),'https://'),'http_only'=>true,'same_site'=>'lax','partitioned'=>false];

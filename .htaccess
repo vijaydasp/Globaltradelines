@@ -1,0 +1,2 @@
+# Point Apache's DocumentRoot at public/. Private application files are never served.
+Require all denied

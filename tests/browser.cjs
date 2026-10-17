@@ -1,0 +1,35 @@
+/* Optional browser QA. Requires an installed Playwright package only for testing. */
+const {chromium}=require(process.env.PLAYWRIGHT_PACKAGE||'playwright');
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const root=path.join(__dirname,'..');
+const config=fs.readFileSync(path.join(root,'.env'),'utf8');
+if(!/^DB_DATABASE=.*_test\s*$/m.test(config))throw new Error('Browser fixtures require a dedicated *_test database.');
+const access=process.env.TEST_ADMIN_EMAIL?{email:process.env.TEST_ADMIN_EMAIL,password:process.env.TEST_ADMIN_PASSWORD}:JSON.parse(fs.readFileSync(path.join(root,'storage/test-access.json'),'utf8'));
+const base=process.env.TEST_BASE_URL||'http://127.0.0.1:8013';
+const fixture='Browser QA '+Date.now(),slug=fixture.toLowerCase().replaceAll(' ','-');
+(async()=>{
+ const browser=await chromium.launch({headless:true});const context=await browser.newContext({viewport:{width:1440,height:1000}});const page=await context.newPage();const errors=[],checks=[],resources=[];let productId,mediaId,specId;
+ page.on('pageerror',error=>errors.push(error.message));page.on('requestfailed',request=>{if(!request.url().startsWith(base))resources.push({url:request.url(),error:request.failure()?.errorText});});
+ const check=(condition,label)=>{assert(condition,label);checks.push(label);};
+ const goto=async route=>{const response=await page.goto(base+route,{waitUntil:'networkidle'});assert(response.status()===200,'HTTP '+route);};
+ const cleanup=async(module,id)=>{if(!id)return;const response=await context.request.get(base+'/admin');const html=await response.text();const token=html.match(/name="_token" value="([a-zA-Z0-9]+)"/)?.[1];if(token)await context.request.post(base+'/admin/'+module+'/'+id+'/delete',{form:{_token:token}});};
+ try{
+  await goto('/admin/login');await page.getByLabel('Email address').fill(access.email);await page.getByLabel('Password',{exact:true}).fill(access.password);await Promise.all([page.waitForURL(base+'/admin'),page.getByRole('button',{name:'Sign in to your workspace'}).click()]);check(await page.locator('h1').textContent().then(t=>t.includes('Welcome back')),'Browser login and dashboard');
+  await page.getByRole('button',{name:'Toggle dark mode'}).click();check(await page.locator('html').getAttribute('data-theme')==='dark','Dark mode toggle');await page.getByRole('button',{name:'Toggle dark mode'}).click();
+  await goto('/admin/products/new');await page.locator('#field-title').fill(fixture);await page.locator('.rich-area').fill('Browser verified product description.');
+  await page.getByRole('tab',{name:'Images',exact:true}).click();await page.locator('[data-inline-upload="field-image_id"]').setInputFiles(path.join(root,'public/assets/img/global-trade-lines-favicon-48.png'));
+  await page.waitForFunction(()=>Number(document.getElementById('field-image_id').value)>0);mediaId=Number(await page.locator('#field-image_id').inputValue());check(mediaId>0,'Inline image upload selects saved media');
+  await Promise.all([page.waitForURL(/\/admin\/products\/\d+$/),page.getByRole('button',{name:'Publish changes'}).click()]);productId=Number(new URL(page.url()).pathname.split('/').pop());check(productId>0,'Tabbed product editor publishes to MySQL');
+  await page.getByRole('tab',{name:'Specifications',exact:true}).click();await page.getByRole('link',{name:'Add specification',exact:false}).click();await page.getByLabel('Specification name').fill('Voltage');await page.locator('#field-value').fill('230 V');await Promise.all([page.waitForURL(/\/admin\/product_specifications\/\d+$/),page.getByRole('button',{name:'Save changes'}).click()]);specId=Number(new URL(page.url()).pathname.split('/').pop());check(specId>0,'Product specification editor saves related record');
+  await goto('/products/'+slug+'/');check(await page.locator('.product-detail-copy').textContent().then(t=>t.includes('230 V')&&t.includes('Browser verified product')),'Published product description and specifications render');check(await page.locator('.product-detail-media img').evaluate(img=>img.complete&&img.naturalWidth>0),'Published uploaded image loads');
+  await goto('/admin/navigation');const orderResponse=page.waitForResponse(r=>r.url().endsWith('/admin/navigation_items/reorder')&&r.request().method()==='POST');const firstNode=page.locator('.tree-list[data-reorder="navigation_items"] > .menu-node').first();await firstNode.locator(':scope > .tree-row [data-move="down"]').click();check((await orderResponse).status()===200,'Accessible menu reorder saves with Fetch');const restore=page.waitForResponse(r=>r.url().endsWith('/admin/navigation_items/reorder'));await page.locator('.tree-list[data-reorder="navigation_items"] > .menu-node').nth(1).locator(':scope > .tree-row [data-move="up"]').click();await restore;
+  await goto('/');await page.getByRole('link',{name:'Products',exact:true}).first().focus();await page.keyboard.press('ArrowDown');check(await page.locator('.primary-nav .dropdown > .nav-link').first().getAttribute('aria-expanded')==='true','Keyboard opens public mega menu');
+  const hero=page.locator('.gtl-hero-media img').first();if(await hero.count())checks.push('Original external hero image load: '+await hero.evaluate(img=>String(img.complete&&img.naturalWidth>0)));
+  for(const width of [1440,768,390]){await page.setViewportSize({width,height:900});for(const route of ['/admin','/admin/products/'+productId,'/','/contact/','/products/'+slug+'/']){await goto(route);const fits=await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1);check(fits,'No horizontal overflow: '+route+' @ '+width);}}
+  await goto('/admin');await page.getByRole('button',{name:'Toggle sidebar'}).click();check(await page.getByRole('button',{name:'Toggle sidebar'}).getAttribute('aria-expanded')==='true','Mobile admin sidebar opens');
+  await goto('/');await page.getByRole('button',{name:'Toggle menu'}).click();check(await page.getByRole('button',{name:'Toggle menu'}).getAttribute('aria-expanded')==='true','Mobile public navigation opens');
+  await cleanup('product_specifications',specId);specId=null;
+  await goto('/admin/products?q='+encodeURIComponent(fixture));await page.getByRole('button',{name:'Delete '+fixture,exact:true}).click();check(await page.locator('#confirm-dialog').isVisible(),'Delete action opens confirmation dialog');await Promise.all([page.waitForURL(base+'/admin/products'),page.locator('#confirm-dialog').getByRole('button',{name:'Delete record'}).click()]);productId=null;checks.push('Confirmed deletion completes and redirects');
+  check(errors.length===0,'No uncaught browser JavaScript errors');
+ }finally{await cleanup('product_specifications',specId);await cleanup('products',productId);await cleanup('media_files',mediaId);fs.writeFileSync(path.join(root,'storage/browser-functional-report.json'),JSON.stringify({checks,errors,resourceFailures:resources},null,2));console.log(JSON.stringify({checks,errors,resourceFailures:resources},null,2));await browser.close();}
+})().catch(error=>{console.error(error);process.exit(1);});
