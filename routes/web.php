@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{AdminController,ImportController,PublicController,MediaController};
+use App\Http\Controllers\{CatalogueImportController,BulkProductImageController};
 
 Route::match(['get','post'],'admin/login',[AdminController::class,'authentication'])->name('login');
 Route::match(['get','post'],'admin/forgot-password',[AdminController::class,'authentication'])->name('password.request');
@@ -15,6 +16,11 @@ Route::prefix('admin')->name('admin.')->middleware('cms.auth')->group(function()
     Route::match(['get','post'],'settings/{group}',[AdminController::class,'settings'])->name('settings');
     Route::post('upload',[AdminController::class,'upload'])->name('upload');
     Route::match(['get','post'],'import',[ImportController::class,'handle'])->name('import');
+    Route::get('catalogue-import/{module}/template',[CatalogueImportController::class,'template'])->whereIn('module',['categories','brands','subcategories'])->name('catalogue-import.template');
+    Route::match(['get','post'],'catalogue-import/{module}',[CatalogueImportController::class,'handle'])->whereIn('module',['categories','brands','subcategories'])->block(120,10)->name('catalogue-import');
+    Route::get('products/bulk-images/media',[BulkProductImageController::class,'media'])->name('bulk-images.media');
+    Route::get('products/bulk-images',[BulkProductImageController::class,'index'])->name('bulk-images');
+    Route::post('products/bulk-images',[BulkProductImageController::class,'save'])->block(120,10)->name('bulk-images.save');
     Route::get('preview/{module}/{id}',[PublicController::class,'preview'])->whereIn('module',['pages','products'])->whereNumber('id')->name('preview');
     Route::middleware('cms.module')->group(function(): void {
         Route::get('{module}',[AdminController::class,'listing'])->name('listing');
