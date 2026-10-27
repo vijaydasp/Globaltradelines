@@ -59,4 +59,27 @@ class FrameworkTest extends TestCase {
         $this->assertSame('Preserve this product',DB::table('products')->where('id',$id)->value('title'));
         $this->assertSame(11,DB::table('pages')->count());
     }
+    public function test_homepage_section_can_be_deleted_with_its_slides_and_items(): void {
+        $user=$this->admin();$this->actingAs($user)->withSession(['auth_version'=>1]);
+        $page=(int)DB::table('pages')->where('page_type','home')->value('id');
+        $section=DB::table('page_sections')->insertGetId(['page_id'=>$page,'title'=>'Disposable section','section_type'=>'hero','status'=>'published']);
+        $slide=DB::table('hero_slides')->insertGetId(['section_id'=>$section,'title'=>'Disposable slide','status'=>'published']);
+        $item=DB::table('section_items')->insertGetId(['section_id'=>$section,'title'=>'Disposable item','status'=>'published']);
+        foreach([['page_sections',$section],['hero_slides',$slide],['section_items',$item]] as [$entity,$entityId]) {
+            DB::table('content_drafts')->insert(['entity'=>$entity,'entity_id'=>$entityId,'payload'=>'{}','editor_id'=>$user->id]);
+            DB::table('content_revisions')->insert(['entity'=>$entity,'entity_id'=>$entityId,'payload'=>'{}','editor_id'=>$user->id]);
+        }
+        $this->get('/admin/homepage')->assertOk()->assertSee('Delete');
+        $this->post('/admin/page_sections/'.$section.'/delete')->assertRedirect('/admin/homepage?page_id='.$page);
+        $this->assertDatabaseMissing('page_sections',['id'=>$section]);
+        $this->assertDatabaseMissing('hero_slides',['id'=>$slide]);
+        $this->assertDatabaseMissing('section_items',['id'=>$item]);
+        $this->assertDatabaseMissing('content_drafts',['entity'=>'hero_slides','entity_id'=>$slide]);
+        $this->assertDatabaseMissing('content_revisions',['entity'=>'section_items','entity_id'=>$item]);
+    }
+    public function test_published_features_section_renders_without_feature_items(): void {
+        $page=(int)DB::table('pages')->where('page_type','home')->value('id');
+        DB::table('page_sections')->insert(['page_id'=>$page,'title'=>'Visible features heading','section_type'=>'features','status'=>'published']);
+        $this->get('/')->assertOk()->assertSee('Visible features heading');
+    }
 }

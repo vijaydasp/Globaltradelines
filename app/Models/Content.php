@@ -109,11 +109,21 @@ final class Content {
         if($module==='media_files') \App\Services\Media::delete($id);
         else DB::transaction(function()use($module,$id): void {
             if($module==='admin_users'){DB::all('SELECT id FROM roles WHERE is_super=1 FOR UPDATE');self::protectAdmin($id,['role_id'=>0,'is_active'=>0]);}
+            if($module==='page_sections') {
+                foreach(['hero_slides','section_items'] as $child) {
+                    $children=DB::all('SELECT id FROM `'.$child.'` WHERE section_id=? FOR UPDATE',[$id]);
+                    DB::run('DELETE FROM `'.$child.'` WHERE section_id=?',[$id]);
+                    foreach($children as $childRecord) self::deleteHistory($child,(int)$childRecord['id']);
+                }
+            }
             DB::run('DELETE FROM `'.$module.'` WHERE id=?',[$id]);
-            DB::run('DELETE FROM content_drafts WHERE entity=? AND entity_id=?',[$module,$id]);
-            DB::run('DELETE FROM content_revisions WHERE entity=? AND entity_id=?',[$module,$id]);
+            self::deleteHistory($module,$id);
             if($module==='enquiries') DB::run('DELETE FROM content_revisions WHERE entity=? AND entity_id=?',[$module,$id]);
             Audit::record('delete',$module,$id,'Deleted record');
         });
+    }
+    private static function deleteHistory(string $module,int $id): void {
+        DB::run('DELETE FROM content_drafts WHERE entity=? AND entity_id=?',[$module,$id]);
+        DB::run('DELETE FROM content_revisions WHERE entity=? AND entity_id=?',[$module,$id]);
     }
 }

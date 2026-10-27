@@ -99,9 +99,11 @@ final class AdminController {
         if(request()->method()!=='POST')throw new HttpException(405,'Submit the action form.');
         $def=Modules::get($module);if(!empty($def['read_only']))throw new HttpException(403,'This record is read-only.');
         if($action==='delete') {
-            try {Content::delete($module,$id);flash('Record deleted.');}
+            $record=Content::find($module,$id);
+            $returnTo=$module==='page_sections'&&$record?'/admin/homepage?page_id='.(int)$record['page_id']:'/admin/'.$module;
+            try {Content::delete($module,$id);flash($module==='page_sections'?'Section deleted.':'Record deleted.');}
             catch(\PDOException $e){if($e->getCode()==='23000')flash('This record still has related items. Move or remove them first.','error');else throw $e;}
-            cms_redirect('/admin/'.$module);
+            cms_redirect($returnTo);
         }
         if($action==='restore') {
             $revision=DB::one('SELECT payload FROM content_revisions WHERE id=? AND entity=? AND entity_id=?',[(int)(request()->post()['revision_id']??0),$module,$id]);
