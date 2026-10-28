@@ -4478,6 +4478,90 @@ body.home-page .hero {
 .brochure-card .brochure-action { margin-top: auto; padding-top: 16px; font-weight: 700; color: var(--primary); }
 .brochure-pagination { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; padding-top: 28px; }
 
+/* Compact contact bar */
+.topbar-pro {
+    background: #082f21;
+    border-bottom-color: rgba(255, 255, 255, .08);
+}
+.topbar-pro .container {
+    max-width: 1440px;
+    min-height: 50px;
+    padding: 0 24px;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+.topbar-pro .tb-left,
+.topbar-pro .tb-right {
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+.topbar-pro .tb-company {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -.3px;
+    white-space: nowrap;
+}
+.topbar-pro .tb-tagline {
+    border: 0;
+    padding: 0;
+    color: rgba(255, 255, 255, .56);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.topbar-pro .tb-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: rgba(255, 255, 255, .68);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.topbar-pro .tb-location i,
+.topbar-pro .tb-right > a > i {
+    color: rgba(255, 255, 255, .4);
+    width: 16px;
+    font-size: 15px;
+    text-align: center;
+}
+.topbar-pro .tb-divider {
+    height: 23px;
+    background: rgba(255, 255, 255, .1);
+}
+.topbar-pro .tb-right { gap: 18px; }
+.topbar-pro .tb-right a {
+    color: rgba(255, 255, 255, .72);
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.topbar-pro .tb-social { gap: 8px; }
+.topbar-pro .tb-social a {
+    width: 34px;
+    height: 30px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .055);
+    color: rgba(255, 255, 255, .65);
+}
+.topbar-pro .tb-social a i { font-size: 15px; line-height: 1; }
+.topbar-pro .tb-social a:hover { background: rgba(255, 255, 255, .14); }
+
+@media (max-width: 1100px) {
+    .topbar-pro .tb-location,
+    .topbar-pro .tb-left-divider,
+    .topbar-pro .tb-social-divider { display: none; }
+    .topbar-pro .container { min-height: 40px; }
+    .topbar-pro .tb-company,
+    .topbar-pro .tb-tagline,
+    .topbar-pro .tb-right a { font-size: 12px; }
+}
+
+@media (max-width: 767.98px) {
+    .topbar-pro { display: none; }
+}
+
 /* Keep all brands accessible without growing the navigation beyond the screen. */
 .brands-dropdown-scroll { max-height: min(360px, 45vh); overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scrollbar-width: thin; scrollbar-color: var(--primary) #eef7f1; }
 .brands-dropdown-scroll > .row { margin: 0; }

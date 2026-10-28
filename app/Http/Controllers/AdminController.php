@@ -153,7 +153,8 @@ final class AdminController {
         $groups=SettingFields::groups();if(!isset($groups[$group]))throw new HttpException(404,'Settings not found.');
         [$label,$fields]=$groups[$group];
         if($group==='text')foreach(DB::all("SELECT setting_key FROM site_settings WHERE group_name='text' ORDER BY setting_key") as $row)$fields[$row['setting_key']]=[ucwords(str_replace('_',' ',substr($row['setting_key'],5))),'text'];
-        $values=[];foreach($fields as $key=>$field)$values[$key]=setting($key);
+        $defaults=$group==='header'?['utility_company_label'=>setting('company_name','GLOBAL TRADE LINES'),'utility_tagline'=>'Excellence in Logistics','utility_location'=>'India · Global Reach','utility_phone'=>'9995694138','utility_email'=>'globaltradelines.gtr@gmail.com','linkedin_url'=>'https://www.linkedin.com/','instagram_url'=>'https://www.instagram.com/','whatsapp_url'=>'https://wa.me/919995694138','facebook_url'=>'https://www.facebook.com/']:[];
+        $values=[];foreach($fields as $key=>$field)$values[$key]=setting($key,$defaults[$key]??'');
         $errors=[];
         if(request()->method()==='POST'){
             foreach($fields as $key=>[$fieldLabel,$type]){

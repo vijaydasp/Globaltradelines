@@ -97,7 +97,7 @@ try {
         'enquiry_notes'=>['title'=>'Internal note','enquiry_id'=>$enquiry],
         'footer_columns'=>['title'=>'Footer column','placement'=>'bottom','content_mode'=>'manual','is_active'=>1],
         'footer_menu_items'=>['title'=>'Footer link','column_id'=>$footerColumn,'link_type'=>'custom','custom_url'=>'/products/','is_active'=>1],
-        'social_links'=>['title'=>'Social link','icon'=>'fa-brands fa-linkedin','custom_url'=>'https://example.test/','is_active'=>1],
+        'social_links'=>['title'=>'Social link','icon'=>'fa-brands fa-facebook','custom_url'=>'https://example.test/','is_active'=>1],
         'roles'=>['title'=>'Custom role','permissions'=>['enquiries']],
         'admin_users'=>['name'=>'QA Managed User','email'=>'managed-'.$suffix.'@example.test','password'=>bin2hex(random_bytes(16)),'role_id'=>4,'is_active'=>1],
         'brands'=>['title'=>'Managed brand','slug'=>'crud-brand-'.$suffix,'website'=>'https://example.test/'],
