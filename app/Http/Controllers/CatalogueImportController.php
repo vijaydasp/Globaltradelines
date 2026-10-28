@@ -112,6 +112,7 @@ final class CatalogueImportController {
 
     private function validate(string $module,array $input): array {
         $errors=[];$input['status']=$input['status']??'draft';
+        if(!empty($input['publish_at'])&&!str_contains($input['publish_at'],'T'))$input['publish_at']=str_replace(' ','T',$input['publish_at']);
         if(($input['slug']??'')!==''&&!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/',$input['slug']))$errors[]='slug: use lowercase letters, numbers and single hyphens.';
         if(isset($input['is_featured'])&&!in_array($input['is_featured'],['0','1'],true))$errors[]='is_featured: use 0 or 1.';
         if($module==='subcategories') {

@@ -33,5 +33,17 @@ function media_img(mixed $id,string $alt='',string $class='',bool $lazy=true): s
     return '<img src="'.e(media_url($id)).'" alt="'.e($item['alt_text']?:$alt).'" class="'.e($class).'"'.($lazy?' loading="lazy"':'').' decoding="async">';
 }
 function rich(mixed $value): string {return App\Services\Sanitizer::html((string)$value);}
+/** Present a UTC database timestamp in India Standard Time. */
+function ist_datetime(?string $value): string {
+    if(!$value)return '';
+    try{return (new DateTimeImmutable($value,new DateTimeZone('UTC')))->setTimezone(new DateTimeZone('Asia/Kolkata'))->format('Y-m-d H:i:s').' IST';}
+    catch(Throwable){return $value;}
+}
+/** Convert a UTC database timestamp to a datetime-local value in IST. */
+function ist_datetime_local(?string $value): string {
+    if(!$value)return '';
+    try{return (new DateTimeImmutable($value,new DateTimeZone('UTC')))->setTimezone(new DateTimeZone('Asia/Kolkata'))->format('Y-m-d\\TH:i');}
+    catch(Throwable){return $value;}
+}
 function request_path(): string {return '/'.trim(request()->path(),'/');}
 function cms_upload_array(?Illuminate\Http\UploadedFile $file): array {return !$file?[]:['name'=>$file->getClientOriginalName(),'size'=>$file->getSize(),'error'=>$file->getError(),'tmp_name'=>$file->getPathname(),'type'=>$file->getMimeType()];}

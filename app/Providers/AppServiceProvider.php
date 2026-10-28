@@ -9,7 +9,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        date_default_timezone_set('UTC');
+        date_default_timezone_set('Asia/Kolkata');
         foreach (Modules::permissions() as $permission=>$label) {
             Gate::define($permission, fn(AdminUser $user) => $user->hasPermission($permission));
         }

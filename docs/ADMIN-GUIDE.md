@@ -19,7 +19,7 @@ The rich-text toolbar supports headings, paragraphs, emphasis, links and lists. 
 - **Save draft** stores a separate working copy and leaves the existing published record intact.
 - **Publish changes** applies the record's edited values to the live website.
 - **Unpublish** hides that record from public routes and queries.
-- **Publish on (UTC)** optionally keeps a published record hidden until the selected time.
+- **Publish on (India Standard Time)** optionally keeps a published record hidden until the selected time.
 - **Preview** on a page/product opens an authenticated draft preview. The link does not give anonymous visitors access.
 - **Revision history** restores an earlier content version as a draft, so you can review it before publishing.
 

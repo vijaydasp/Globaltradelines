@@ -41,9 +41,11 @@ final class Validator {
                     if($value===false||$value<($field['min']??0)||$value>($field['max']??1000000)) $errors[$key]='Enter a whole number between '.($field['min']??0).' and '.($field['max']??1000000).'.';
                 }
                 if($type==='datetime') {
-                    $date=\DateTimeImmutable::createFromFormat('!Y-m-d\TH:i',$value)?:\DateTimeImmutable::createFromFormat('!Y-m-d H:i:s',$value);
+                    $isLocalInput=str_contains($value,'T');
+                    $timezone=new \DateTimeZone($isLocalInput?'Asia/Kolkata':'UTC');
+                    $date=\DateTimeImmutable::createFromFormat($isLocalInput?'!Y-m-d\TH:i':'!Y-m-d H:i:s',$value,$timezone);
                     if(!$date || array_filter(\DateTimeImmutable::getLastErrors()?:[])) $errors[$key]='Enter a valid date and time.';
-                    else $value=$date->format('Y-m-d H:i:s');
+                    else $value=$date->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d H:i:s');
                 }
             } elseif($type==='datetime') $value=null;
             if($type==='richtext') $value=Sanitizer::html($value);
