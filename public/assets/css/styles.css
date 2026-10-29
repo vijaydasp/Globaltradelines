@@ -667,6 +667,18 @@ a {
     background: #fff;
     border: 1px solid var(--border)
 }
+/* Brand menu logos use a contained, non-growing thumbnail rather than product-image sizing. */
+.mega-menu.brands-mega-menu .menu-group:nth-child(1) .menu-item img.nav-product-thumb,
+.mega-menu.brands-mega-menu .menu-item img.nav-product-thumb {
+    width: 42px;
+    height: 28px;
+    min-width: 42px;
+    max-width: 42px;
+    flex: 0 0 42px;
+    object-fit: contain;
+    object-position: center;
+    padding: 2px;
+}
 .mega-menu .menu-item i {
     width: 28px;
     text-align: center;
@@ -681,6 +693,10 @@ a {
 .mega-menu.brands-mega-menu .menu-item i {
     width: 24px;
     font-size: 0.85rem
+}
+/* Brands without an uploaded logo stay text-only instead of showing a generic product icon. */
+.mega-menu.brands-mega-menu .menu-item i {
+    display: none;
 }
 .mega-menu .menu-item .item-desc {
     font-size: 0.72rem;
@@ -3382,10 +3398,10 @@ nav.primary-nav a svg {
     width: 10px;
     height: 10px
 }
-nav.primary-nav li.active a {
+nav.primary-nav > ul > li.active > a {
     color: var(--green)
 }
-nav.primary-nav li.active a::after {
+nav.primary-nav > ul > li.active > a::after {
     content: "";
     position: absolute;
     left: 0;
