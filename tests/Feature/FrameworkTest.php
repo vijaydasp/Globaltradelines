@@ -77,9 +77,9 @@ class FrameworkTest extends TestCase {
         $this->assertDatabaseMissing('content_drafts',['entity'=>'hero_slides','entity_id'=>$slide]);
         $this->assertDatabaseMissing('content_revisions',['entity'=>'section_items','entity_id'=>$item]);
     }
-    public function test_published_features_section_renders_without_feature_items(): void {
+    public function test_published_features_section_hides_its_internal_section_name_without_feature_items(): void {
         $page=(int)DB::table('pages')->where('page_type','home')->value('id');
-        DB::table('page_sections')->insert(['page_id'=>$page,'title'=>'Visible features heading','section_type'=>'features','status'=>'published']);
-        $this->get('/')->assertOk()->assertSee('Visible features heading');
+        DB::table('page_sections')->insert(['page_id'=>$page,'title'=>'Internal features section name','section_type'=>'features','status'=>'published']);
+        $this->get('/')->assertOk()->assertDontSee('Internal features section name');
     }
 }

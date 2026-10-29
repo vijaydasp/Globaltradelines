@@ -22,3 +22,4 @@
 .footer-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important}.footer-grid>.col{min-width:0!important}.footer-contact a{overflow-wrap:anywhere}
 @media(max-width:600px){.footer-grid{grid-template-columns:1fr 1fr!important}}
 @media(max-width:1024px){.gtl-home .gtl-hero-copy{padding-left:24px!important;padding-right:24px!important}.cms-align-center .gtl-hero-copy,.cms-align-right .gtl-hero-copy{width:100%;margin:0}}
+

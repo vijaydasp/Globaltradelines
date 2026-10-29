@@ -327,7 +327,6 @@ window.addEventListener('resize', setTopbarHeight);
   // Inner pages (Careers, Contact, About, Services, etc.) are always solid white via
   // CSS (body:not(.home-page) / body.career-page), so no scroll logic should touch them.
   if (!document.body.classList.contains('home-page')) return;
-
   function updateHeaderState() {
     headerGroup.classList.toggle('scrolled', window.scrollY > 0);
   }
